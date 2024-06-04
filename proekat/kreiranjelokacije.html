@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apitoken"
+          content="g8s8XTo7dmj20ZbVrPbukZ4F7MG4Rqc6MTeQzRKgsffWwAYi1Mdwzqmr6gFxTVj0eWCkWK8ek4Hj82WGISl8M0RE3o">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Luke Sever</title>
+    <link rel="stylesheet" href="stilovi.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(function ()
+        {
+            var form = new FormData();
+            form.append("name", $('#naziv').val());
+            form.append("address", $('#adresa').val());
+            form.append("city", $('#grad').val());
+            form.append("description", $('#opis').val());
+            form.append("workingHours", "radnoVreme");
+            form.append("apitoken", $('meta[name="apitoken"]').attr('content'));
+
+            $.ajax
+            ({
+                "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/lokacija",
+                "method": "POST",
+                "timeout": 0,
+                "headers":
+                    {
+                    "Accept": "application/json"
+                    },
+                "processData": false,
+                "mimeType": "multipart/form-data",
+                "contentType": false,
+                "data": form,
+                "success": function (response)
+                {
+                    console.log(response);
+                },
+                "error": function (response)
+                {
+                    console.log(response);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="div">
+    <form action="#" id="forma_prijava">
+
+        <label for="naziv"> Naziv: </label></br>
+        <input type="text" name="naziv" id="naziv" placeholder="Ovde uneti naziv" required>
+        <p id="p_naziv"></p>
+
+        <label for="adresa"> Adresa: </label></br>
+        <input type="text" name="adresa" id="adresa" placeholder="Ovde uneti adresu" required>
+        <p id="p_adresa"></p>
+
+        <label for="grad"> Grad: </label></br>
+        <input type="text" name="grad" id="grad" placeholder="Ovde uneti grad">
+        <p id="p_grad"></p>
+
+        <label for="opis"> Opis: </label></br>
+        <textarea id="opis" placeholder="Ovde uneti opis"></textarea>
+        <p id="p_opis"></p>
+
+        <div>
+            <label for="ponedeljak">Ponedeljak:</label>
+            <input type="hidden" id="ponedeljak" value="1"></br>
+            <input type="number" id="ponedeljak_sati_od" placeholder="Sati od"></br></br>
+            <input type="number" id="ponedeljak_minuti_od" placeholder="Minuti od"></br></br>
+            <input type="number" id="ponedeljak_sati_do" placeholder="Sati do" disabled></br></br>
+            <input type="number" id="ponedeljak_minuti_do" placeholder="Minuti do" disabled></br></br>
+        </div>
+
+        <div>
+            <label for="utorak">Utorak:</label>
+            <input type="hidden" id="utorak" value="2"></br>
+            <input type="number" id="utorak_sati_od" placeholder="Sati od"></br></br>
+            <input type="number" id="utorak_minuti_od" placeholder="Minuti od"></br></br>
+            <input type="number" id="utorak_sati_do" placeholder="Sati do" disabled></br></br>
+            <input type="number" id="utorak_minuti_do" placeholder="Minuti do" disabled></br></br>
+        </div>
+
+        <div>
+            <label for="sreda">Sreda:</label>
+            <input type="hidden" id="sreda" value="3"></br>
+            <input type="number" id="sreda_sati_od" placeholder="Sati od"></br></br>
+            <input type="number" id="sreda_minuti_od" placeholder="Minuti od"></br></br>
+            <input type="number" id="sreda_sati_do" placeholder="Sati do" disabled></br></br>
+            <input type="number" id="sreda_minuti_do" placeholder="Minuti do" disabled></br></br>
+        </div>
+
+        <div>
+            <label for="cetvrtak">Cetvrtak:</label>
+            <input type="hidden" id="cetvrtak" value="4"></br>
+            <input type="number" id="cetvrtak_sati_od" placeholder="Sati od"></br></br>
+            <input type="number" id="cetvrtak_minuti_od" placeholder="Minuti od"></br></br>
+            <input type="number" id="cetvrtak_sati_do" placeholder="Sati do" disabled></br></br>
+            <input type="number" id="cetvrtak_minuti_do" placeholder="Minuti do" disabled></br></br>
+        </div>
+
+        <div>
+            <label for="pretak">Pretak:</label>
+            <input type="hidden" id="pretak" value="5"></br>
+            <input type="number" id="pretak_sati_od" placeholder="Sati od"></br></br>
+            <input type="number" id="pretak_minuti_od" placeholder="Minuti od"></br></br>
+            <input type="number" id="pretak_sati_do" placeholder="Sati do" disabled></br></br>
+            <input type="number" id="pretak_minuti_do" placeholder="Minuti do" disabled></br></br>
+        </div>
+
+        <div>
+            <label for="subota">Subota:</label>
+            <input type="hidden" id="subota" value="6"></br>
+            <input type="number" id="subota_sati_od" placeholder="Sati od"></br></br>
+            <input type="number" id="subota_minuti_od" placeholder="Minuti od"></br></br>
+            <input type="number" id="subota_sati_do" placeholder="Sati do" disabled></br></br>
+            <input type="number" id="subota_minuti_do" placeholder="Minuti do" disabled></br></br>
+        </div>
+
+        <div>
+            <label for="nedelja">nedelja:</label>
+            <input type="hidden" id="nedelja" value="7"></br>
+            <input type="number" id="nedelja_sati_od" placeholder="Sati od"></br></br>
+            <input type="number" id="nedelja_minuti_od" placeholder="Minuti od"></br></br>
+            <input type="number" id="nedelja_sati_do" placeholder="Sati do" disabled></br></br>
+            <input type="number" id="nedelja_minuti_do" placeholder="Minuti do" disabled></br></br>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>

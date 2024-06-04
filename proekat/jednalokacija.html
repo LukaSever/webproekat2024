@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apitoken"
+          content="g8s8XTo7dmj20ZbVrPbukZ4F7MG4Rqc6MTeQzRKgsffWwAYi1Mdwzqmr6gFxTVj0eWCkWK8ek4Hj82WGISl8M0RE3o">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Luke Sever</title>
+    <link rel="stylesheet" href="tabela.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(function()
+        {
+            var url = new URLSearchParams(window.location.search);
+            var lokacija_id = url.get('id');
+
+            $.ajax
+            ({
+                "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/lokacija/" + lokacija_id + "?apitoken=" + $('meta[name="apitoken"]').attr('content'),
+                "method": "GET",
+                "timeout": 0,
+                "success": function(response)
+                {
+                    $('#id_lokacije').val(lokacija_id);
+                    $('#naziv').val(response.naziv);
+                    $('#adresa').val(response.adresa);
+                    $('#grad').val(response.grad);
+                    $('#opis').val(response.opis);
+                    $('#radno_vreme').val(response.radnoVreme);
+                },
+                "error": function(response)
+                {
+                    console.log(response);
+                }
+            });
+
+            $('#snimi').on('click', function(e)
+            {
+                e.preventDefault();
+                var form = new FormData();
+                form.append("name", $('#naziv').val());
+                form.append("address", $('#adresa').val());
+                form.append("city", $('#grad').val());
+                form.append("description", $('#opis').val());
+                form.append("workingHours", radnoVreme );
+                form.append("apitoken", $('meta[name="apitoken"]').attr('content'));
+
+                $.ajax
+                ({
+                    "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/lokacija/" + lokacija_id,
+                    "method": "PATCH",
+                    "timeout": 0,
+                    "headers":
+                        {
+                            "Accept": "application/json",
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                    "processData": false,
+                    "mimeType": "multipart/form-data",
+                    "contentType": false,
+                    "data": form,
+                    "success": function(response)
+                    {
+                        $('#p_snimi').text("Подаци су успесно сачувани").css('color','#0f0');
+                    },
+                    "error": function(response)
+                    {
+                        if (response.responseJSON !== undefined)
+                        {
+                            $('#p_snimi').text(response.responseJSON.error).css('color','#f00');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="div">
+    <form action="#" id="forma_lokacija">
+
+        <input type="hidden" name="id_lokacije" id="id_lokacije">
+
+        <label for="naziv"> Naziv lokacije: </label></br>
+        <input type="text" name="naziv" id="naziv" required>
+        <p id="p_naziv"></p>
+
+        <label for="adresa"> Adresa: </label></br>
+        <input type="text" name="adresa" id="adresa" required>
+        <p id="p_adresa"></p>
+
+        <label for="grad"> Grad: </label></br>
+        <input type="text" name="grad" id="grad">
+        <p id="p_grad"></p>
+
+        <label for="opis"> Opis: </label></br>
+        <input type="text" name="opis" id="opis">
+        <p id="p_opis"></p>
+
+        <label for="radno_vreme"> RAdno vreme: </label></br>
+        <input type="text" name="radno_vreme" id="radno_vreme">
+        <p id="p_radno_vreme"></p>
+
+        <button id="snimi"> Snimi </button>
+        <p id="p_snimi"></p>
+    </form>
+</div>
+</body>
+</html>

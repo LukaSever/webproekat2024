@@ -1,0 +1,75 @@
+body
+{
+    margin: 0;
+}
+
+#div
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#forma_prijava,
+#forma_prijava,
+#forma_korisnik,
+#forma_prijava
+{
+    background-color: #eee;
+    border: solid #aaa;
+    max-width: 500px;
+    padding: 20px;
+}
+
+label,
+input,
+button
+{
+    width: 500px;
+}
+
+button
+{
+    width: 508px;
+    height: 2em;
+}
+
+button:hover
+{
+    background-color: #ccc;
+    color: #fff;
+    border: none;
+    outline: solid 1px #f00;
+}
+
+button:active
+{
+    outline: solid 1px #0f0;
+}
+
+@media all and (max-width: 500px)
+{
+    #div
+    {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+    }
+
+    #forma_prijava,
+    #forma_prijava,
+    #forma_korisnik,
+    #forma_prijava
+    {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        max-width: 500px;
+    }
+}

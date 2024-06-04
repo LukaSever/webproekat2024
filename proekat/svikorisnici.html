@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apitoken"
+          content="g8s8XTo7dmj20ZbVrPbukZ4F7MG4Rqc6MTeQzRKgsffWwAYi1Mdwzqmr6gFxTVj0eWCkWK8ek4Hj82WGISl8M0RE3o">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Luke Sever</title>
+    <link rel="stylesheet" href="tabela.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(function()
+        {
+            $.ajax
+            ({
+                "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/korisnik?apitoken=" + $('meta[name="apitoken"]').attr('content'),
+                "method": "GET",
+                "timeout": 0,
+                "headers":
+                    {
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                    },
+                "success": function (response)
+                {
+                    response.forEach((element, index) => {
+                        $('#tabela').append('<tr><td>' + element.id + '</td><td>' + element.imePrezime + '</td><td>' + element.email + '</td><td>' + element.telefon + '</td><td>' + element.lokacije + '</td><td>' + element.uloga.naziv + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td>' + 0 + '</td><td><button class="obrisi" data-korisnik-id="' + element.id + '"> Obrisi </button><button class="izmeni" data-korisnik-id="' + element.id + '"> Izmeni </button></td></tr>')
+                    })
+
+                    $('.obrisi').on('click', function (e)
+                    {
+                        e.preventDefault();
+                        var korisnik_id = $(this).data('korisnik-id');
+                        var red = $(this).closest('tr');
+                        $.ajax
+                        ({
+                            "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/korisnik/" + korisnik_id + "?apitoken=" + $('meta[name="apitoken"]').attr('content'),
+                            "method": "DELETE",
+                            "timeout": 0,
+                            "headers":
+                                {
+                                    "Accept": "application/json",
+                                    "Authorization": "Bearer " + localStorage.getItem('token')
+                                },
+                            "processData": false,
+                            "mimeType": "multipart/form-data",
+                            "contentType": false,
+                            "data": form,
+                            "success": function (response)
+                            {
+                                red.remove();
+                                alert('Успешно сте обрисали корисника');
+                            },
+                            "error": function (response)
+                            {
+                                console.log(response);
+                            }
+                        });
+                    });
+
+                    $('.izmeni').on('click', function (e)
+                    {
+                        e.preventDefault();
+                        var korisnik_id = $(this).data('korisnik-id');
+                        window.location.href = "jedankorisnik.html?id=" + korisnik_id;
+                    });
+                },
+                "error": function(response)
+                {
+                    console.log(response);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div>
+    <table id="tabela">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ime i prezime</th>
+            <th>Email</th>
+            <th>Telefon</th>
+            <th>Lokacija</th>
+            <th>Uloga</th>
+            <th>Broj dogadjaja</th>
+            <th>Broj rezervisanih ulaznica</th>
+            <th>Broj kupljenih ulaznica</th>
+            <th>Broj odkazanih ulaznica</th>
+            <th>Broj akcija</th>
+            <th>Akcija</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+</body>
+</html>

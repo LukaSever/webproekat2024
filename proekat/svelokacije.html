@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apitoken"
+          content="g8s8XTo7dmj20ZbVrPbukZ4F7MG4Rqc6MTeQzRKgsffWwAYi1Mdwzqmr6gFxTVj0eWCkWK8ek4Hj82WGISl8M0RE3o">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Luke Sever</title>
+    <link rel="stylesheet" href="tabela.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $.ajax
+        ({
+            "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/lokacija?apitoken=" + $('meta[name="apitoken"]').attr('content'),
+            "method": "GET",
+            "timeout": 0,
+            "headers":
+                {
+                    "Accept": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+            "success": function (response)
+            {
+                response.forEach((element, index) => {
+                    $('#tabela').append('<tr><td>'+element.id+'</td><td>'+element.naziv+'</td><td>'+element.grad+'</td><td>'+element.adresa+'</td><td>'+element.opis+'</td><td>'+element.rednovreme+'</td><td>'+element.blagajnici.length+'</td><td>'+element.dogadjaji.length+'</td><td><button class="obrisi" data-lokacija-id="' + element.id + '"> Obrisi </button><button class="izmeni" data-lokacija-id="' + element.id + '"> Izmeni </button></td></tr>')
+                })
+
+                $('.obrisi').on('click', function (e)
+                {
+                    e.preventDefault();
+                    var lokacija_id = $(this).data('lokacija-id');
+                    var red = $(this).closest('tr');
+                    $.ajax
+                    ({
+                        "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/lokacija/"+ lokacija_id +"?apitoken="+ $('meta[name="apitoken"]').attr('content'),
+                        "method": "DELETE",
+                        "timeout": 0,
+                        "headers":
+                            {
+                                "Accept": "application/json",
+                                "Authorization": "Bearer " + localStorage.getItem('token')
+                            },
+                        "processData": false,
+                        "mimeType": "multipart/form-data",
+                        "contentType": false,
+                        "data": form,
+                        "success": function (response)
+                        {
+                            red.remove();
+                            alert('Успешно сте обрисали локацију');
+                        },
+                        "error": function (response)
+                        {
+                            console.log(response);
+                        }
+                    });
+                });
+
+                $('.izmeni').on('click',function (e)
+                {
+                    e.preventDefault();
+                    var lokacija_id = $(this).data('lokacija-id');
+                    window.location.href="jednalokacija.html?id=" + lokacija_id;
+                });
+                console.log(response);
+            },
+            "error": function (response)
+            {
+                console.log(response);
+            }
+        });
+    </script>
+</head>
+<body>
+<div>
+    <table id="tabela">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Naziv lokacije</th>
+            <th>Grad</th>
+            <th>Adresa</th>
+            <th>Opis</th>
+            <th>Radno vreme</th>
+            <th>Ukupno blagajnika</th>
+            <th>Ukupno dogadjaja</th>
+            <th>Akcija</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+</body>
+</html>

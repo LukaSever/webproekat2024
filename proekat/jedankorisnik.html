@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apitoken"
+          content="g8s8XTo7dmj20ZbVrPbukZ4F7MG4Rqc6MTeQzRKgsffWwAYi1Mdwzqmr6gFxTVj0eWCkWK8ek4Hj82WGISl8M0RE3o">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Luka Sever</title>
+    <link rel="stylesheet" href="stilovi.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(function()
+        {
+            var url = new URLSearchParams(window.location.search);
+            var korisnik_id = url.get('id');
+
+            $.ajax
+            ({
+                "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/uloga?apitoken=" + $('meta[name="apitoken"]').attr('content'),
+                "method": "GET",
+                "timeout": 0,
+                "headers":
+                    {
+                        "Accept": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem('token')
+                    },
+                "success": function (response)
+                {
+                    response.forEach((element, index) => {
+                        $('#uloge').append('<option value="'+element.id+'">'+element.naziv+'</option>')
+                    })
+                    console.log(response);
+                },
+                "error": function (response)
+                {
+                    console.log(response);
+                }
+            });
+
+            $.ajax
+            ({
+                "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/lokacija?apitoken=" + $('meta[name="apitoken"]').attr('content'),
+                "method": "GET",
+                "timeout": 0,
+                "headers":
+                    {
+                        "Accept": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem('token')
+                    },
+                "success": function (response)
+                {
+                    response.forEach((element, index) => {
+                        $('#lokacije').append('<option value="'+element.id+'">'+element.naziv+'</option>')
+                    })
+                    console.log(response);
+                },
+                "error": function (response)
+                {
+                    console.log(response);
+                }
+            });
+
+            $('#lokacije').hide();
+            $('#uloge').on('change',function ()
+            {
+                if($(this).val()==='2')
+                    $('#lokacije').show();
+                else
+                    $('#lokacije').hide();
+            });
+
+            $.ajax
+            ({
+                "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/korisnik/" + korisnik_id + "?apitoken=" + $('meta[name="apitoken"]').attr('content'),
+                "method": "GET",
+                "timeout": 0,
+                "success": function(response)
+                {
+                    $('#id_korisnika').val(korisnik_id);
+                    $('#ime_prezime').val(response.imePrezime);
+                    $('#email').val(response.email);
+                    $('#telefon').val(response.telefon);
+                    $('#uloge').val(response.uloga.id);
+                },
+                "error": function(response)
+                {
+                    console.log(response);
+                }
+            });
+
+            $('#snimi').on('click', function(e)
+            {
+                e.preventDefault();
+                var form = new FormData();
+                form.append("name", $('#ime_prezime').val());
+                form.append("email", $('#email').val());
+                form.append("phone", $('#telefon').val());
+                form.append("userRoleId", $('#uloge').val());
+                form.append("locationId", $('#lokacije').val());
+                form.append("apitoken", $('meta[name="apitoken"]').attr('content'));
+                $.ajax
+                ({
+                    "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/korisnik/" + korisnik_id,
+                    "method": "PATCH",
+                    "timeout": 0,
+                    "headers":
+                        {
+                            "Accept": "application/json",
+                            "Authorization": "Bearer " + localStorage.getItem('token')
+                        },
+                    "processData": false,
+                    "mimeType": "multipart/form-data",
+                    "contentType": false,
+                    "data": form,
+                    "success": function(response)
+                    {
+                        $('#p_snimi').text("Подаци су успесно сачувани").css('color','#0f0');
+                    },
+                    "error": function(response)
+                    {
+                        if (response.responseJSON !== undefined)
+                        {
+                            $('#p_snimi').text(response.responseJSON.error).css('color','#f00');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="div">
+    <form action="#" id="forma_korisnik">
+
+        <input type="hidden" name="id_korisnika" id="id_korisnika">
+
+        <label for="ime_prezime"> Ime i prezime: </label></br>
+        <input type="text" name="ime_prezime" id="ime_prezime" required>
+        <p id="p_ime_prezime"></p>
+
+        <label for="email"> Email: </label></br>
+        <input type="email" name="email" id="email" required>
+        <p id="p_email"></p>
+
+        <label for="telefon"> Telefon: </label></br>
+        <input type="text" name="telefon" id="telefon">
+        <p id="p_telefon"></p>
+
+        <select name="uloge" id="uloge"></select></br></br>
+
+        <select name="lokacije" id="lokacije"></select></br></br>
+
+        <button id="snimi"> Snimi </button>
+        <p id="p_snimi"></p>
+    </form>
+</div>
